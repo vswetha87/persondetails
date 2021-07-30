@@ -2,6 +2,7 @@ package com.firstmeridian.persondetails.controller;
 
 import com.firstmeridian.persondetails.dto.AddressRequestDto;
 import com.firstmeridian.persondetails.dto.AddressResponseDTO;
+import com.firstmeridian.persondetails.globalexception.AddressException;
 import com.firstmeridian.persondetails.response.ApiResponse;
 import com.firstmeridian.persondetails.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class AddressController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<AddressResponseDTO>> update(@RequestParam("id") long id, @RequestBody AddressRequestDto addressRequestDto) {
+    public ResponseEntity<ApiResponse<AddressResponseDTO>> update(@RequestParam("id") long id, @RequestBody AddressRequestDto addressRequestDto) throws AddressException {
         AddressResponseDTO addressResponseDTO = addressService.update(id, addressRequestDto);
         ResponseEntity<ApiResponse<AddressResponseDTO>> responseEntity;
         if (addressResponseDTO != null) {
@@ -56,7 +57,7 @@ public class AddressController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse<String>> delete(@RequestParam("id") long id) {
+    public ResponseEntity<ApiResponse<String>> delete(@RequestParam("id") long id) throws AddressException {
         boolean isDeleted = addressService.delete(id);
         ResponseEntity<ApiResponse<String>> responseEntity;
         if (isDeleted) {

@@ -4,6 +4,7 @@ import com.firstmeridian.persondetails.domain.Address;
 import com.firstmeridian.persondetails.domain.Person;
 import com.firstmeridian.persondetails.dto.AddressRequestDto;
 import com.firstmeridian.persondetails.dto.AddressResponseDTO;
+import com.firstmeridian.persondetails.globalexception.AddressException;
 import com.firstmeridian.persondetails.repository.AddressRepository;
 import com.firstmeridian.persondetails.repository.PersonRepository;
 import org.junit.Test;
@@ -50,21 +51,21 @@ public class AddressServiceImplTest {
     }
 
     @Test
-    public void testDeleteAddressSuccess(){
+    public void testDeleteAddressSuccess() throws AddressException {
         when(addressRepository.findById(anyLong())).thenReturn(Optional.of(getAddress(12)));
         boolean isDeleted = addressService.delete(12);
         assertTrue(isDeleted);
     }
 
     @Test
-    public void testDeleteAddressFailure(){
+    public void testDeleteAddressFailure() throws AddressException {
         boolean isDeleted = addressService.delete(12);
         assertFalse(isDeleted);
     }
 
 
     @Test
-    public void testUpdateAddress(){
+    public void testUpdateAddress() throws AddressException {
         when(addressRepository.findById(anyLong())).thenReturn(Optional.of(getAddress(13)));
         when(addressRepository.save(any(Address.class))).thenReturn(getAddress(13));
         AddressResponseDTO addressResponseDTO = addressService.update(13, getAddressRequestDto());

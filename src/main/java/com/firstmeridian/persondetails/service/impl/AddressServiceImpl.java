@@ -4,6 +4,7 @@ import com.firstmeridian.persondetails.domain.Address;
 import com.firstmeridian.persondetails.domain.Person;
 import com.firstmeridian.persondetails.dto.AddressRequestDto;
 import com.firstmeridian.persondetails.dto.AddressResponseDTO;
+import com.firstmeridian.persondetails.globalexception.AddressException;
 import com.firstmeridian.persondetails.repository.AddressRepository;
 import com.firstmeridian.persondetails.repository.PersonRepository;
 import com.firstmeridian.persondetails.service.AddressService;
@@ -39,17 +40,22 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public boolean delete(long id) {
-        Optional<Address> addressOptional = addressRepository.findById(id);
-        if (addressOptional.isPresent()) {
-            addressRepository.delete(addressOptional.get());
-            return true;
+    public boolean delete(long id) throws AddressException {
+        try{
+            Optional<Address> addressOptional = addressRepository.findById(id);
+            if (addressOptional.isPresent()) {
+                addressRepository.delete(addressOptional.get());
+                return true;
+            }
+        }catch (Exception e){
+            throw new AddressException("Invalid Id");
         }
         return false;
     }
 
     @Override
-    public AddressResponseDTO update(long id, AddressRequestDto addressRequestDto) {
+    public AddressResponseDTO update(long id, AddressRequestDto addressRequestDto) throws AddressException {
+        try {
         Optional<Address> addressOptional = addressRepository.findById(id);
         if (addressOptional.isPresent()) {
             Address address = addressOptional.get();
@@ -59,6 +65,9 @@ public class AddressServiceImpl implements AddressService {
             address.setPostalCode(addressRequestDto.getPostalCode());
             Address udpatedAddress = addressRepository.save(address);
             return this.convertToResponse(udpatedAddress);
+        }
+        }catch (Exception e){
+            throw new AddressException("Invalid Request");
         }
         return null;
     }

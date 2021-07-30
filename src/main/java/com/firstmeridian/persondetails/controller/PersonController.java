@@ -2,6 +2,7 @@ package com.firstmeridian.persondetails.controller;
 
 import com.firstmeridian.persondetails.dto.PersonRequestDto;
 import com.firstmeridian.persondetails.dto.PersonResponseDTO;
+import com.firstmeridian.persondetails.globalexception.PersonException;
 import com.firstmeridian.persondetails.response.ApiResponse;
 import com.firstmeridian.persondetails.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class PersonController {
     private PersonService personService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PersonResponseDTO>> add(@RequestBody PersonRequestDto personRequestDto) {
+    public ResponseEntity<ApiResponse<PersonResponseDTO>> add(@RequestBody PersonRequestDto personRequestDto) throws PersonException {
         PersonResponseDTO personResponseDTO = personService.add(personRequestDto);
         return getResponseEntity(personResponseDTO);
     }
@@ -49,13 +50,13 @@ public class PersonController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<PersonResponseDTO>> update(@RequestParam("id") long id, @RequestBody PersonRequestDto personRequestDto) {
+    public ResponseEntity<ApiResponse<PersonResponseDTO>> update(@RequestParam("id") long id, @RequestBody PersonRequestDto personRequestDto) throws PersonException {
         PersonResponseDTO personResponseDTO = personService.update(id, personRequestDto);
         return getResponseEntity(personResponseDTO);
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse<String>> delete(@RequestParam("id") long id) {
+    public ResponseEntity<ApiResponse<String>> delete(@RequestParam("id") long id) throws PersonException {
         boolean isDeleted = personService.delete(id);
         ResponseEntity<ApiResponse<String>> responseEntity;
         if (isDeleted) {

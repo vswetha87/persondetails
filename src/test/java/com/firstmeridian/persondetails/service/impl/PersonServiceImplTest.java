@@ -3,6 +3,7 @@ package com.firstmeridian.persondetails.service.impl;
 import com.firstmeridian.persondetails.domain.Person;
 import com.firstmeridian.persondetails.dto.PersonRequestDto;
 import com.firstmeridian.persondetails.dto.PersonResponseDTO;
+import com.firstmeridian.persondetails.globalexception.PersonException;
 import com.firstmeridian.persondetails.repository.PersonRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +37,7 @@ public class PersonServiceImplTest {
     private static final String LASTNAME = "Doe";
 
     @Test
-    public void testCreatePerson(){
+    public void testCreatePerson() throws PersonException {
         when(personRepository.save(any(Person.class))).thenReturn(getPerson(12));
         PersonResponseDTO personResponseDTO = personService.add(getPersonRequestDto());
         assertNotNull(personResponseDTO);
@@ -45,21 +46,21 @@ public class PersonServiceImplTest {
     }
 
     @Test
-    public void testDeletePersonSuccess(){
+    public void testDeletePersonSuccess() throws PersonException {
         when(personRepository.findById(anyLong())).thenReturn(Optional.of(getPerson(12)));
         boolean isDeleted = personService.delete(12);
         assertTrue(isDeleted);
     }
 
     @Test
-    public void testDeletePersonFailure(){
+    public void testDeletePersonFailure() throws PersonException {
         boolean isDeleted = personService.delete(12);
         assertFalse(isDeleted);
     }
 
 
     @Test
-    public void testUpdatePerson(){
+    public void testUpdatePerson() throws PersonException {
         when(personRepository.findById(anyLong())).thenReturn(Optional.of(getPerson(13)));
         when(personRepository.save(any(Person.class))).thenReturn(getPerson(13));
         PersonResponseDTO personResponseDTO = personService.update(13, getPersonRequestDto());
